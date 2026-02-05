@@ -1,0 +1,68 @@
+//| repositories:
+//| - file://${MILL_USER_TEST_REPO}
+//| mvnDeps:
+//| - org.scalateams::mill-zio-http-gen::$MILL_PLUGIN_VERSION
+
+import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
+import mill.scalalib.*
+
+object `package` extends ScalaModule with ZioHttpGenModule {
+
+  def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.8.1")
+  def scalaVersion = "3.3.7"
+
+  object openapi extends OpenAPIModule
+}
+
+/** Usage
+
+> ./mill show __.openapi.allSources
+[
+  ".../openapi"
+]
+
+> ./mill show __.openapi.allSourceFiles
+[
+  ".../openapi/openapi.yaml"
+]
+
+> ./mill __.openapi.generate
+Generated 2 file(s) from .../openapi/openapi.yaml in package org.example
+...
+
+> ./mill show __.openapi.generate
+{
+  "dest": ".../out/openapi/generate.dest",
+  "files": [
+    ".../out/openapi/generate.dest/v1/users/UserId.scala",
+    ".../out/openapi/generate.dest/component/User.scala"
+  ]
+}
+
+> ./mill show __.openapi.generatedSources
+[]
+
+> ./mill show __.openapi.packagePrefix
+[
+  "org",
+  "example"
+]
+
+> ./mill show __.openapi.sources
+[
+  ".../openapi"
+]
+
+> ./mill __.compile
+...
+done compiling
+
+> ./mill show __.generatedSources
+{
+  "generatedSources": [
+    ".../out/openapi/generate.dest"
+  ],
+  "openapi.generatedSources": []
+}
+
+*/

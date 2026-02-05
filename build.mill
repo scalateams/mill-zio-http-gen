@@ -1,0 +1,111 @@
+//| mill-version: 1.1.1-native
+//| repositories:
+//| - https://central.sonatype.com/repository/maven-snapshots
+//| - https://oss.sonatype.org/content/repositories/snapshots
+//| mvnDeps:
+//| - com.goyeau::mill-git::0.3.2
+//| - com.goyeau::mill-scalafix::0.6.0
+//| - com.lihaoyi::mill-contrib-buildinfo:$MILL_VERSION
+
+import com.goyeau.mill.git.{GitVersionModule, GitVersionedPublishModule}
+import com.goyeau.mill.scalafix.StyleModule
+import mill.*
+import mill.api.Task.Simple
+import mill.contrib.buildinfo.*
+import mill.scalalib.*
+import mill.scalalib.publish.*
+import mill.scalalib.scalafmt.*
+
+val Description  = "A zio-http-gen plugin for Mill build tool"
+val Developers   = Seq(
+  Developer("scalateams", "ScalaTeams", "https://github.com/scalateams"),
+)
+val Licences     = Seq(License.`Apache-2.0`)
+val Organization = "org.scalateams"
+val ProjectName  = "mill-zio-http-gen"
+val Url          = "https://github.com/scalateams/mill-zio-http-gen"
+val VC           = VersionControl.github("scalateams", "mill-zio-http-gen")
+
+object `mill-zio-http-gen`
+    extends BuildInfo
+    with GitVersionedPublishModule
+    with ScalaModule
+    with SonatypeCentralPublishModule
+    with StyleModule {
+
+  val millVersion = "1.0.0"
+
+  override def artifactName = s"${ProjectName}_mill1"
+
+  override def buildInfoPackageName = "org.scalateams.mill.zio.http.gen"
+  override def buildInfoMembers     = Seq(
+    BuildInfo.Value("name", ProjectName),
+    BuildInfo.Value("version", publishVersion()),
+    BuildInfo.Value("scalaVersion", scalaVersion()),
+    BuildInfo.Value("millVersion", millVersion),
+  )
+
+  override def compileMvnDeps = super.compileMvnDeps() ++ Seq(
+    mvn"com.lihaoyi::mill-libs-scalalib:$millVersion",
+  )
+
+  override def mvnDeps = super.mvnDeps() ++ Seq(
+    mvn"dev.zio::zio-http-gen:3.8.1".exclude(("org.scala-sbt", "compiler-interface")),
+    mvn"dev.zio::zio-json:0.8.0",
+    mvn"dev.zio::zio-json-yaml:0.8.0",
+    mvn"dev.zio::zio-schema:1.7.6",
+    mvn"dev.zio::zio-schema-json:1.7.6",
+  )
+
+  override def pomSettings    = PomSettings(
+    description = Description,
+    organization = Organization,
+    url = Url,
+    licenses = Licences,
+    versionControl = VC,
+    developers = Developers,
+  )
+  override def publishVersion = GitVersionModule.version(withSnapshotSuffix = true)()
+
+  override def scalacOptions = super.scalacOptions() ++
+    Seq(
+      "-deprecation",
+      "-encoding",
+      "utf-8",
+      "-explaintypes",
+      "-feature",
+      "-language:existentials",
+      "-language:experimental.macros",
+      "-language:higherKinds",
+      "-language:implicitConversions",
+      "-unchecked",
+      "-explain-cyclic",
+      "-no-indent",
+      "-Wunused:all",
+      "-Xfatal-warnings",
+    )
+  override def scalaVersion  = "3.7.4"
+
+  object test extends ScalaTests with TestModule.ScalaTest {
+
+    override def forkEnv =
+      Map(
+        "MILL_EXECUTABLE_PATH" -> millExecutable.assembly().path.toString,
+        "MILL_USER_TEST_REPO"  -> publishLocalTestRepo().path.toString,
+        "MILL_PLUGIN_VERSION"  -> publishVersion(),
+      )
+
+    override def mvnDeps =
+      Seq(
+        mvn"com.lihaoyi::mill-testkit:$millVersion",
+        mvn"org.scalatest::scalatest:3.2.19",
+      )
+
+    // Mill executable configured for cross testing
+    object millExecutable extends JavaModule {
+
+      override def mvnDeps   = Seq(mvn"com.lihaoyi:mill-runner-launcher_3:$millVersion")
+      override def mainClass = Some("mill.launcher.MillLauncherMain")
+    }
+  }
+}

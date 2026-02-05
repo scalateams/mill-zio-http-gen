@@ -1,0 +1,28 @@
+name: CI
+on:
+  create:
+    tags:
+      - v*
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v6
+      - name: Pull all history with tags for correct versioning
+        run: git fetch --prune --unshallow
+      - name: Run checks
+        run: ./mill __.checkStyle + __.test + __.publishLocal
+      - name: Publish artifacts
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+        run: ./mill mill.scalalib.SonatypeCentralPublishModule/
+        env:
+          MILL_PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          MILL_PGP_SECRET_BASE64: ${{ secrets.PGP_SECRET }}
+          MILL_SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          MILL_SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
