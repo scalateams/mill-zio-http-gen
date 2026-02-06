@@ -1,0 +1,17 @@
+name: Scala Steward
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+jobs:
+  scala-steward:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+    steps:
+      - uses: scala-steward-org/scala-steward-action@v2.84.0
+        with:
+          mill-version: '1.1.1'
+          repo-config: ".scala-steward.conf"
