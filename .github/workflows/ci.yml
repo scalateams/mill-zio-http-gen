@@ -15,12 +15,16 @@ jobs:
       FORCE_COLOR: '1'
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@v6
-      - name: Pull all history with tags for correct versioning
-        run: git fetch --prune --unshallow
+        uses: actions/checkout@v6.0.2
+        with:
+          fetch-depth: 0
       - name: Restore cache
-        uses: coursier/cache-action@v6
+        uses: coursier/cache-action@v8.0.0
         id: coursier-cache
+      - name: Setup JVM
+        uses: coursier/setup-action@v2.0.2
+        with:
+          jvm: temurin:17
       - name: Run checks
         run: ./mill __.checkStyle + __.test + __.publishLocal
       - name: Publish artifacts
