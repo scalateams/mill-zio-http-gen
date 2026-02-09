@@ -11,11 +11,16 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      FORCE_COLOR: '1'
     steps:
       - name: Checkout current branch
         uses: actions/checkout@v6
       - name: Pull all history with tags for correct versioning
         run: git fetch --prune --unshallow
+      - name: Restore cache
+        uses: coursier/cache-action@v6
+        id: coursier-cache
       - name: Run checks
         run: ./mill __.checkStyle + __.test + __.publishLocal
       - name: Publish artifacts
