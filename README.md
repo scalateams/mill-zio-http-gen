@@ -87,7 +87,7 @@ object project extends ScalaModule with ZioHttpGenModule { self =>
 Before committing run:
 
 ```sh
-./mill __.reformat + __.test + __.publishLocal
+./mill __.style + __.test + __.publishLocal
 ```
 
 All contributions are welcome!
