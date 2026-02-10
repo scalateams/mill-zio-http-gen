@@ -19,7 +19,7 @@ import mill.scalalib.scalafmt.*
 
 val Description  = "A zio-http-gen plugin for Mill build tool"
 val Developers   = Seq(
-  Developer("scalateams", "ScalaTeams", "https://github.com/scalateams"),
+  Developer("scalateams", "ScalaTeams", "https://github.com/scalateams", email = "team@scalateams.org"),
 )
 val Licences     = Seq(License.`Apache-2.0`)
 val Organization = "org.scalateams"
