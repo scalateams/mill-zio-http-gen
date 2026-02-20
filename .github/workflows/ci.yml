@@ -1,3 +1,4 @@
+name: CI
 run-name: >-
   ${{ github.event_name == 'pull_request' && format('CI: pull request checks') ||
       github.event_name == 'release' && format('CI: release {0}', github.ref_name) ||
