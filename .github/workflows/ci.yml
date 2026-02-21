@@ -1,12 +1,17 @@
 name: CI
+run-name: >-
+  ${{ github.event_name == 'pull_request' && format('CI: pull request checks') ||
+      github.event_name == 'release' && format('CI: release {0}', github.ref_name) ||
+      format('CI: branch merge checks') }}
 on:
-  create:
-    tags:
-      - v*
+  pull_request:
   push:
     branches:
       - main
-  pull_request:
+  release:
+    types:
+      - published
+      - edited
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -28,7 +33,7 @@ jobs:
       - name: Run checks
         run: ./mill __.checkStyle + __.test + __.publishLocal
       - name: Publish artifacts
-        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v')
         env:
           MILL_PGP_PASSPHRASE: ${{ secrets.MILL_PGP_PASSPHRASE }}
           MILL_PGP_SECRET_BASE64: ${{ secrets.MILL_PGP_SECRET_BASE64 }}
