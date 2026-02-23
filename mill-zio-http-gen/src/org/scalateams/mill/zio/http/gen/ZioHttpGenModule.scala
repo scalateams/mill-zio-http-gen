@@ -3,7 +3,7 @@ package org.scalateams.mill.zio.http.gen
 import mill.*
 import mill.scalalib.*
 import org.scalateams.mill.zio.http.gen.api.GenerationResult
-import org.scalateams.mill.zio.http.gen.parsers.Parser
+import org.scalateams.mill.zio.http.gen.parsers.{Parser, ParserRef}
 import os.RelPath
 import zio.http.gen.scala.CodeGen
 
@@ -12,13 +12,18 @@ import scala.util.control.NonFatal
 trait ZioHttpGenModule extends ScalaModule { outer: ScalaModule =>
 
   override def generatedSources: T[Seq[PathRef]] = Task {
-    super.generatedSources() ++ Task.traverse(generators)(_.generate)().map(_.dest)
+    super.generatedSources() ++ Task.traverse(generatorModules)(_.generate)().map(_.dest)
   }
 
-  trait OpenAPIModule extends Module { inner: Module =>
+  def generatorModules: Seq[GeneratorModule] = {
+    def recur(module: Module): Seq[GeneratorModule] = module match {
+      case m: GeneratorModule => Seq(m)
+      case m: Module          => m.moduleDirectChildren.flatMap(recur)
+    }
+    recur(outer)
+  }
 
-    import zio.http.endpoint.openapi.OpenAPI
-    import zio.http.gen.openapi.{Config, EndpointGen}
+  trait GeneratorModule extends Module { inner: Module =>
 
     /**
      * The folders containing all source files fed into the endpoint generator.
@@ -29,23 +34,66 @@ trait ZioHttpGenModule extends ScalaModule { outer: ScalaModule =>
      * All individual source files fed into the endpoint generator.
      */
     def allSourceFiles: T[Seq[PathRef]] = Task {
-      Lib.findSourceFiles(allSources(), parsers.keys.toSeq).map(PathRef(_))
+      Lib.findSourceFiles(allSources(), parsers().keys.toSeq).map(PathRef(_))
     }
+
+    /**
+     * The main code generation task. This should read the source files from
+     * `allSourceFiles`, parse them using the appropriate parsers from
+     * `parsers`, generate code based on the parsed representations, and write
+     * the generated files to `Task.dest`. It should then return a
+     * `GenerationResult` containing the destination folder and the list of
+     * generated files.
+     */
+    def generate: T[GenerationResult]
+
+    /**
+     * Folders containing source files that are generated rather than
+     * handwritten; these files can be generated in this task itself, or can
+     * refer to files generated from other tasks.
+     */
+    def generatedSources: T[Seq[PathRef]] = Task { Seq.empty[PathRef] }
+
+    def packagePrefix: T[Seq[String]]
+
+    /**
+     * A mapping from file extensions to parsers, used to determine how to parse
+     * the source files fed into the generator.
+     */
+    def parsers: T[Map[String, ParserRef]]
+
+    /**
+     * The folders where the source files for this module live. By default, this
+     * evaluates to the module directory.
+     */
+    def sources: T[Seq[PathRef]] = Task.Sources(inner.moduleDir)
+  }
+
+  trait OpenAPIModule extends GeneratorModule { inner: Module =>
+
+    import zio.http.endpoint.openapi.OpenAPI
+    import zio.http.gen.openapi.{Config, EndpointGen}
+
+    given upickle.default.ReadWriter[Config.NormalizeFields] = upickle.default.macroRW
+    given upickle.default.ReadWriter[Config]                 = upickle.default.macroRW
 
     /**
      * Configuration for the OpenAPI endpoint generator.
      */
-    def config: Config = Config.default
+    def config: T[Config] = Task { Config.default }
 
-    def generate: T[GenerationResult] = Task {
-      val _       = inner.inputHash()
-      val config  = inner.config
+    override def generate: T[GenerationResult] = Task {
+      val config  = inner.config()
       val prefix  = inner.packagePrefix()
       val sources = inner.allSourceFiles()
+      val parsers = inner.parsers()
       val files   = sources.flatMap { source =>
         parsers.get(source.path.ext) match {
-          case None         => Task.fail(s"No parser found for file extension: ${source.path.ext}")
-          case Some(parser) =>
+          case None            => Task.fail(s"No parser found for file extension: ${source.path.ext}")
+          case Some(parserRef) =>
+            val parser      =
+              try ParserRef.resolve(parserRef)
+              catch { case e if NonFatal(e) => Task.fail(e.getMessage) }
             val content     = os.read(source.path).getBytes("UTF-8")
             val openapi     = parser.parse[OpenAPI](content).fold(Task.fail, identity)
             val files       =
@@ -76,45 +124,20 @@ trait ZioHttpGenModule extends ScalaModule { outer: ScalaModule =>
       GenerationResult(PathRef(Task.dest), files)
     }
 
-    /**
-     * Folders containing source files that are generated rather than
-     * handwritten; these files can be generated in this task itself, or can
-     * refer to files generated from other tasks.
-     */
-    def generatedSources: T[Seq[PathRef]] = Task { Seq.empty[PathRef] }
-
-    def packagePrefix: T[Seq[String]] = Task { Seq("org", "example") }
-
-    /**
-     * The parsers available for parsing OpenAPI files.
-     */
-    def parsers: Map[String, Parser] =
+    override def parsers: T[Map[String, ParserRef]] = Task {
       Map(
-        "json" -> Parser.BuiltInJsonParser,
-        "yaml" -> Parser.BuiltInYamlParser,
-        "yml"  -> Parser.BuiltInYamlParser,
+        "json" -> ParserRef.of(Parser.json),
+        "yaml" -> ParserRef.of(Parser.yaml),
+        "yml"  -> ParserRef.of(Parser.yaml),
       )
-
-    /**
-     * The folders where the source files for this module live. By default, this
-     * evaluates to the module directory.
-     */
-    def sources: T[Seq[PathRef]] = Task.Sources(inner.moduleDir)
-
-    protected def inputHash: T[Int] = Task.Input {
-      val config  = inner.config
-      val parsers = inner.parsers
-      (config, parsers).hashCode()
     }
   }
-
-  private def generators: Seq[OpenAPIModule] = moduleDirectChildren.collect { case m: OpenAPIModule => m }
 }
 
 object ZioHttpGenModule {
 
-  private[http] def dirDiffToPackage(base: os.Path, file: os.Path): Seq[String] = {
-    val relPath = file.relativeTo(base)
-    relPath.segments.dropRight(1).map(_.toString)
+  private[gen] def dirDiffToPackage(base: os.Path, file: os.Path): Seq[String] = {
+    val relPath = base.relativeTo(file / os.up)
+    relPath.segments.map(_.toString)
   }
 }

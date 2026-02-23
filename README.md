@@ -37,9 +37,9 @@ object openapi extends OpenAPIModule {
   import org.scalateams.mill.zio.http.gen.parsers.Parser
   import zio.http.gen.openapi.Config
   
-  def config        = Config.default.copy(commonFieldsOnSuperType = true)
+  def config        = Task { Config.default.copy(commonFieldsOnSuperType = true) }
   def packagePrefix = Task { Seq("com", "example") }
-  def parsers       = Map("yaml" -> Parser.BuiltInYamlParser)
+  def parsers       = Task { Map("yaml" -> ParserRef.of[Parser.yaml])
   def sources       = Task.Sources("openapi")
 }
 ```
@@ -51,9 +51,15 @@ object openapi extends OpenAPIModule {
 
   import mill.*
 
-  def specification    = Task { "openapi: 3.1.0\ninfo:\n  title: User API\n  version: 1.0.0\npaths:\n" }
+  def specification    = Task {
+    """openapi: 3.1.0
+      |info:
+      |  title: User API
+      |  version: 1.0.0
+      |paths:""".stripMargin
+  }
   def generatedSources = Task {
-    val content = specification()
+    val content = specification() // think of downloading etc.
     os.write.over(Task.dest / Path("openapi.yaml"), content, createFolders = true)
     Seq(PathRef(Task.dest))
   }
@@ -86,8 +92,8 @@ object project extends ScalaModule with ZioHttpGenModule { self =>
 
 Before committing run:
 
-```sh
-./mill __.style + __.test + __.publishLocal
+```console
+$ ./mill __.style + __.test + __.publishLocal
 ```
 
 All contributions are welcome!

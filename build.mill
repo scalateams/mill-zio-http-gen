@@ -21,7 +21,7 @@ val Description  = "A zio-http-gen plugin for Mill build tool"
 val Developers   = Seq(
   Developer("scalateams", "ScalaTeams", "https://github.com/scalateams", email = "team@scalateams.org"),
 )
-val Licences     = Seq(License.`Apache-2.0`)
+val Licenses     = Seq(License.`Apache-2.0`)
 val Organization = "org.scalateams"
 val ProjectName  = "mill-zio-http-gen"
 val Url          = "https://github.com/scalateams/mill-zio-http-gen"
@@ -62,7 +62,7 @@ object `mill-zio-http-gen`
     description = Description,
     organization = Organization,
     url = Url,
-    licenses = Licences,
+    licenses = Licenses,
     versionControl = VC,
     developers = Developers,
   )
