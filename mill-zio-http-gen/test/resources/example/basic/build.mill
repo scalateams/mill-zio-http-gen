@@ -1,9 +1,11 @@
+//| mill-jvm-version: system
 //| repositories:
 //| - file://${MILL_USER_TEST_REPO}
 //| mvnDeps:
 //| - org.scalateams::mill-zio-http-gen::$MILL_PLUGIN_VERSION
 
 import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
+import mill.*
 import mill.scalalib.*
 
 object `package` extends ScalaModule with ZioHttpGenModule {
@@ -11,7 +13,13 @@ object `package` extends ScalaModule with ZioHttpGenModule {
   def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.8.1")
   def scalaVersion = "3.3.7"
 
-  object openapi extends OpenAPIModule
+  object openapi extends OpenAPIModule {
+
+    import zio.http.gen.openapi.Config
+
+    def config        = Task { Config.default.copy(commonFieldsOnSuperType = true) }
+    def packagePrefix = Seq("org", "example")
+  }
 }
 
 /** Usage
@@ -25,6 +33,18 @@ object `package` extends ScalaModule with ZioHttpGenModule {
 [
   ".../openapi/openapi.yaml"
 ]
+
+
+> ./mill show __.openapi.config
+{
+  "commonFieldsOnSuperType": true,
+  "generateSafeTypeAliases": false,
+  "fieldNamesNormalization": {
+    "enableAutomatic": false,
+    "manualOverrides": {}
+  },
+  "stringFormatTypes": {}
+}
 
 > ./mill __.openapi.generate
 Generated 2 file(s) from .../openapi/openapi.yaml in package org.example
@@ -47,6 +67,22 @@ Generated 2 file(s) from .../openapi/openapi.yaml in package org.example
   "org",
   "example"
 ]
+
+> ./mill show __.openapi.parsers
+{
+  "json": {
+    "id": "json-...",
+    "className": "org.scalateams.mill.zio.http.gen.parsers.Parser$json$"
+  },
+  "yaml": {
+    "id": "yaml-...",
+    "className": "org.scalateams.mill.zio.http.gen.parsers.Parser$yaml$"
+  },
+  "yml": {
+    "id": "yaml-...",
+    "className": "org.scalateams.mill.zio.http.gen.parsers.Parser$yaml$"
+  }
+}
 
 > ./mill show __.openapi.sources
 [
