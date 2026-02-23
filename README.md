@@ -1,5 +1,7 @@
 # mill-zio-http-gen
 
+![CI passing badge](https://github.com/scalateams/mill-zio-http-gen/actions/workflows/ci.yml/badge.svg?branch=main) ![Maven Central version badge](https://img.shields.io/maven-central/v/org.scalateams/mill-zio-http-gen_mill1_3) [![Scaladoc badge](https://img.shields.io/badge/Scaladoc-gray)](https://javadoc.io/doc/org.scalateams/mill-zio-http-gen_mill1_3/latest/org.scalateams.mill.zio.http.gen/index.html) [![Scala Steward helping badge](https://img.shields.io/badge/Scala_Steward-helping-blue.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAMAAAARSr4IAAAAVFBMVEUAAACHjojlOy5NWlrKzcYRKjGFjIbp293YycuLa3pYY2LSqql4f3pCUFTgSjNodYRmcXUsPD/NTTbjRS+2jomhgnzNc223cGvZS0HaSD0XLjbaSjElhIr+AAAAAXRSTlMAQObYZgAAAHlJREFUCNdNyosOwyAIhWHAQS1Vt7a77/3fcxxdmv0xwmckutAR1nkm4ggbyEcg/wWmlGLDAA3oL50xi6fk5ffZ3E2E3QfZDCcCN2YtbEWZt+Drc6u6rlqv7Uk0LdKqqr5rk2UCRXOk0vmQKGfc94nOJyQjouF9H/wCc9gECEYfONoAAAAASUVORK5CYII=)](https://github.com/scala-steward-org/scala-steward) [![GitHub stars badge](https://img.shields.io/github/stars/scalateams/mill-zio-http-gen?style=social)](https://github.com/scalateams/mill-zio-http-gen)
+
 A [zio-http-gen](https://github.com/zio/zio-http) plugin for Mill build tool.
 
 ## Usage
