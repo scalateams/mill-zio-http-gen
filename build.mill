@@ -54,8 +54,8 @@ object `mill-zio-http-gen`
     mvn"dev.zio::zio-http-gen:3.8.1".exclude(("org.scala-sbt", "compiler-interface")),
     mvn"dev.zio::zio-json:0.8.0",
     mvn"dev.zio::zio-json-yaml:0.8.0",
-    mvn"dev.zio::zio-schema:1.7.6",
-    mvn"dev.zio::zio-schema-json:1.7.6",
+    mvn"dev.zio::zio-schema:1.8.0",
+    mvn"dev.zio::zio-schema-json:1.8.0",
   )
 
   override def pomSettings    = PomSettings(
