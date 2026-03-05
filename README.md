@@ -9,7 +9,7 @@ A [zio-http-gen](https://github.com/zio/zio-http) plugin for Mill build tool.
 *build.mill*:
 ```scala
 //| mvnDeps:
-//| - org.scalateams::mill-zio-http-gen::0.1.0
+//| - org.scalateams::mill-zio-http-gen::0.1.1
 import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
 import mill.scalalib.*
 
