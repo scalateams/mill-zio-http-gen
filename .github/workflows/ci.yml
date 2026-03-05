@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Restore cache
-        uses: coursier/cache-action@v8.0.0
+        uses: coursier/cache-action@v8.0.1
         id: coursier-cache
       - name: Setup JVM
         uses: coursier/setup-action@v2.0.3
