@@ -4,13 +4,13 @@
 //| mvnDeps:
 //| - org.scalateams::mill-zio-http-gen::$MILL_PLUGIN_VERSION
 
-import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
 import mill.*
 import mill.scalalib.*
+import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
 
 object `package` extends ScalaModule with ZioHttpGenModule {
 
-  def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.8.1")
+  def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.9.0")
   def scalaVersion = "3.3.7"
 
   object openapi extends OpenAPIModule {
