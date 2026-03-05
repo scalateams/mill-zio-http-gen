@@ -56,6 +56,7 @@ object openapi extends OpenAPIModule {
 
   import mill.*
 
+  def packagePrefix    = Task { Seq("com", "example") }
   def specification    = Task {
     """openapi: 3.1.0
       |info:
@@ -76,7 +77,10 @@ object openapi extends OpenAPIModule {
 ```scala
 object project extends ScalaModule with ZioHttpGenModule { self =>
 
-  object openapi extends OpenAPIModule
+  object openapi extends OpenAPIModule {
+
+    def packagePrefix = Task { Seq("com", "example") }
+  }
 
   object openapi_internal extends OpenAPIModule {
 
