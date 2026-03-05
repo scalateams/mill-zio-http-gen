@@ -27,7 +27,7 @@ object project extends ScalaModule with ZioHttpGenModule {
 
 ```shell script
 > mill project.compile
-Generated 2 file(s) from .../openapi/openapi.yaml in package org.example
+Generated 2 file(s) from .../openapi/openapi.yaml in package com.example
 Compiling compiler interface...
 ...
 done compiling
