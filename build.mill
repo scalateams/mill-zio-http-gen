@@ -82,8 +82,8 @@ object `mill-zio-http-gen`
       "-unchecked",
       "-explain-cyclic",
       "-no-indent",
+      "-Werror",
       "-Wunused:all",
-      "-Xfatal-warnings",
     )
   override def scalaVersion  = "3.8.2"
 
