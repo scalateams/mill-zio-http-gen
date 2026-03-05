@@ -15,7 +15,7 @@ import mill.scalalib.*
 
 object project extends ScalaModule with ZioHttpGenModule {
 
-  def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.8.0")
+  def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.9.0")
   def scalaVersion = "3.3.7"
 
   object openapi extends OpenAPIModule {
