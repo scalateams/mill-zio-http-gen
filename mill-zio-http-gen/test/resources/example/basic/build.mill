@@ -4,9 +4,9 @@
 //| mvnDeps:
 //| - org.scalateams::mill-zio-http-gen::$MILL_PLUGIN_VERSION
 
-import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
 import mill.*
 import mill.scalalib.*
+import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
 
 object `package` extends ScalaModule with ZioHttpGenModule {
 
