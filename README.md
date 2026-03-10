@@ -9,13 +9,13 @@ A [zio-http-gen](https://github.com/zio/zio-http) plugin for Mill build tool.
 *build.mill*:
 ```scala
 //| mvnDeps:
-//| - org.scalateams::mill-zio-http-gen::0.1.1
+//| - org.scalateams::mill-zio-http-gen::0.1.2
 import mill.scalalib.*
 import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
 
 object project extends ScalaModule with ZioHttpGenModule {
 
-  def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.9.0")
+  def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.10.0")
   def scalaVersion = "3.3.7"
 
   object openapi extends OpenAPIModule {
