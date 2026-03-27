@@ -99,7 +99,7 @@ object `mill-zio-http-gen`
     override def mvnDeps =
       Seq(
         mvn"com.lihaoyi::mill-testkit:$millVersion",
-        mvn"org.scalatest::scalatest:3.2.19",
+        mvn"org.scalatest::scalatest:3.2.20",
       )
 
     // Mill executable configured for cross testing
