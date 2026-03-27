@@ -44,7 +44,7 @@ object openapi extends OpenAPIModule {
   
   def config        = Task { Config.default.copy(commonFieldsOnSuperType = true) }
   def packagePrefix = Task { Seq("com", "example") }
-  def parsers       = Task { Map("yaml" -> ParserRef.of[Parser.yaml])
+  def parsers       = Task { Map("yaml" -> ParserRef.of[Parser.yaml]) }
   def sources       = Task.Sources("openapi")
 }
 ```
