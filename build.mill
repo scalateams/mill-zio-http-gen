@@ -38,13 +38,14 @@ object `mill-zio-http-gen`
 
   override def artifactName = s"${ProjectName}_mill1"
 
-  override def buildInfoPackageName = "org.scalateams.mill.zio.http.gen"
-  override def buildInfoMembers     = Seq(
+  override def buildInfoPackageName    = "org.scalateams.mill.zio.http.gen"
+  override def buildInfoMembers        = Seq(
     BuildInfo.Value("name", ProjectName),
     BuildInfo.Value("version", publishVersion()),
     BuildInfo.Value("scalaVersion", scalaVersion()),
     BuildInfo.Value("millVersion", millVersion),
   )
+  override def buildInfoStaticCompiled = true
 
   override def compileMvnDeps = super.compileMvnDeps() ++ Seq(
     mvn"com.lihaoyi::mill-libs-scalalib:$millVersion",
