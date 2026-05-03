@@ -52,7 +52,7 @@ object `mill-zio-http-gen`
   )
 
   override def mvnDeps = super.mvnDeps() ++ Seq(
-    mvn"dev.zio::zio-http-gen:3.11.0".exclude(("org.scala-sbt", "compiler-interface")),
+    mvn"dev.zio::zio-http-gen:3.11.1".exclude(("org.scala-sbt", "compiler-interface")),
     mvn"dev.zio::zio-json:0.9.1",
     mvn"dev.zio::zio-json-yaml:0.9.1",
     mvn"dev.zio::zio-schema:1.8.3",
