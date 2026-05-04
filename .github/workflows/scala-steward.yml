@@ -18,5 +18,5 @@ jobs:
       - uses: scala-steward-org/scala-steward-action@v2.88.0
         with:
           branches: main
-          mill-version: 1.1.5
+          mill-version: 1.1.6
           repo-config: .scala-steward.conf
