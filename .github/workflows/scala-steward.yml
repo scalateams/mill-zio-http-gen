@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
-      - uses: scala-steward-org/scala-steward-action@v2.88.0
+      - uses: scala-steward-org/scala-steward-action@v2.90.0
         with:
           branches: main
           mill-version: 1.1.6
