@@ -10,11 +10,12 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: coursier/setup-action@v3.0.0
+      - name: Setup JVM
+        uses: coursier/setup-action@v3.0.0
         with:
           jvm: temurin:17
-      - uses: scala-steward-org/scala-steward-action@v2.90.0
+      - name: Launch Scala Steward
+        uses: scala-steward-org/scala-steward-action@v2.90.0
         with:
-          branches: main
-          mill-version: 1.1.6
-          repo-config: .scala-steward.conf
+          mill-version: '1.1.6'
+          repo-config: '.scala-steward.conf'
