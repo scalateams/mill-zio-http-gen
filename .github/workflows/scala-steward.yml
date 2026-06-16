@@ -10,6 +10,10 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v6.0.3
+        with:
+          fetch-depth: 0
       - name: Setup JDK
         uses: actions/setup-java@v5.3.0
         with:
