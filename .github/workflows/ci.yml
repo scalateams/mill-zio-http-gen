@@ -28,13 +28,14 @@ jobs:
         uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v5.3.0
+        with:
+          java-version: 17
+          distribution: temurin
       - name: Restore cache
         uses: coursier/cache-action@v8.1.1
         id: coursier-cache
-      - name: Setup JVM
-        uses: coursier/setup-action@v3.0.0
-        with:
-          jvm: temurin:17
       - name: Run checks
         run: ./mill __.checkStyle + __.test + __.publishLocal
       - name: Publish artifacts
