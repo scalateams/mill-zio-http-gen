@@ -8,13 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
       pull-requests: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6.0.3
+      - uses: coursier/setup-action@v3.0.0
         with:
-          fetch-depth: 0
+          jvm: temurin:17
       - uses: scala-steward-org/scala-steward-action@v2.90.0
         with:
           branches: main
