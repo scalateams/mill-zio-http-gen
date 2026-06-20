@@ -19,6 +19,7 @@ on:
       - published
 jobs:
   ci:
+    if: (github.event_name != 'pull_request' || github.event.pull_request.draft != true)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -35,7 +36,6 @@ jobs:
           distribution: temurin
       - name: Restore cache
         uses: coursier/cache-action@v8.1.1
-        id: coursier-cache
       - name: Run checks
         run: ./mill __.checkStyle + __.test + __.publishLocal
       - name: Publish artifacts
