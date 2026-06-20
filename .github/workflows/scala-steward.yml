@@ -19,7 +19,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-      - name: Launch Scala Steward
+      - name: Run Scala Steward
         uses: scala-steward-org/scala-steward-action@v2.84.0
         with:
           branches: main
