@@ -17,6 +17,9 @@ on:
     types:
       - edited
       - published
+concurrency:
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+  group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   ci:
     if: (github.event_name != 'pull_request' || github.event.pull_request.draft != true)
@@ -34,7 +37,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-      - name: Restore cache
+      - name: Restore Coursier cache
         uses: coursier/cache-action@v8.1.1
       - name: Run checks
         run: ./mill __.checkStyle + __.test + __.publishLocal
