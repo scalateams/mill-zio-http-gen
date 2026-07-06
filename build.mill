@@ -1,7 +1,7 @@
 //| mill-version: 1.1.7-native
 //| mill-jvm-version: system
 //| mvnDeps:
-//| - com.goyeau::mill-scalafix::0.6.0
+//| - com.goyeau::mill-scalafix::0.6.1
 //| - com.lihaoyi::mill-contrib-buildinfo:$MILL_VERSION
 
 import com.goyeau.mill.scalafix.StyleModule
