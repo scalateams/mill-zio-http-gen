@@ -96,7 +96,7 @@ object `mill-zio-http-gen` extends BuildInfo with ScalaModule with SonatypeCentr
     override def mvnDeps =
       Seq(
         mvn"com.lihaoyi::mill-testkit:$millVersion",
-        mvn"org.scalatest::scalatest::3.2.20",
+        mvn"org.scalatest::scalatest:3.2.20",
       )
 
     // Mill executable configured for cross testing
