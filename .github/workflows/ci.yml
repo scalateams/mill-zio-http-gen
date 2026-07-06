@@ -26,7 +26,7 @@ jobs:
       FORCE_COLOR: '1'
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
       - name: Setup JDK
