@@ -1,4 +1,4 @@
-//| mill-version: 1.2.0-RC1-native
+//| mill-version: 1.2.0-RC1-42-dc1f60-native
 //| mill-jvm-version: system
 //| mvnDeps:
 //| - com.goyeau::mill-scalafix::0.6.1
@@ -60,7 +60,8 @@ object `mill-zio-http-gen` extends BuildInfo with ScalaModule with SonatypeCentr
   )
   override def publishVersion = Task.Input {
     val state = VcsVersion.calcVcsState(Task.log)
-    if (Task.env.contains("CI")) state.copy(dirtyHash = None).format()
+    if (state.lastTag.isEmpty) "SNAPSHOT"
+    else if (Task.env.contains("CI")) state.copy(dirtyHash = None).format()
     else state.format()
   }
 
