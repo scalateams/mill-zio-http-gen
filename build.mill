@@ -1,11 +1,9 @@
 //| mill-version: 1.1.7-native
 //| mill-jvm-version: system
 //| mvnDeps:
-//| - com.goyeau::mill-git::0.3.2
 //| - com.goyeau::mill-scalafix::0.6.0
 //| - com.lihaoyi::mill-contrib-buildinfo:$MILL_VERSION
 
-import com.goyeau.mill.git.{GitVersionModule, GitVersionedPublishModule}
 import com.goyeau.mill.scalafix.StyleModule
 import mill.*
 import mill.api.Task.Simple
@@ -13,6 +11,7 @@ import mill.contrib.buildinfo.*
 import mill.scalalib.*
 import mill.scalalib.publish.*
 import mill.scalalib.scalafmt.*
+import mill.util.VcsVersion
 
 val Description  = "A zio-http-gen plugin for Mill build tool"
 val Developers   = Seq(
@@ -24,12 +23,7 @@ val ProjectName  = "mill-zio-http-gen"
 val Url          = "https://github.com/scalateams/mill-zio-http-gen"
 val VC           = VersionControl.github("scalateams", "mill-zio-http-gen")
 
-object `mill-zio-http-gen`
-    extends BuildInfo
-    with GitVersionedPublishModule
-    with ScalaModule
-    with SonatypeCentralPublishModule
-    with StyleModule {
+object `mill-zio-http-gen` extends BuildInfo with ScalaModule with SonatypeCentralPublishModule with StyleModule {
 
   val millVersion = "1.0.0"
 
@@ -64,7 +58,12 @@ object `mill-zio-http-gen`
     versionControl = VC,
     developers = Developers,
   )
-  override def publishVersion = GitVersionModule.version(withSnapshotSuffix = true)()
+  override def publishVersion = Task.Input {
+    val state = VcsVersion.calcVcsState(Task.log)
+    if (state.lastTag.isEmpty) "SNAPSHOT"
+    else if (Task.env.contains("CI")) state.copy(dirtyHash = None).format()
+    else state.format()
+  }
 
   override def scalacOptions = super.scalacOptions() ++
     Seq(
