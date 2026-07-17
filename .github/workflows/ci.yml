@@ -18,8 +18,8 @@ on:
       - edited
       - published
 concurrency:
-  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/v') }}
-  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
 jobs:
   ci:
     if: (github.event_name != 'pull_request' || github.event.pull_request.draft != true)
