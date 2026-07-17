@@ -18,7 +18,7 @@ on:
       - edited
       - published
 concurrency:
-  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
   group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   ci:
