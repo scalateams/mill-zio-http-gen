@@ -18,7 +18,7 @@ on:
       - edited
       - published
 concurrency:
-  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
   group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   ci:
@@ -33,7 +33,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup JDK
-        uses: actions/setup-java@v5.4.0
+        uses: actions/setup-java@v5.5.0
         with:
           java-version: 17
           distribution: temurin
