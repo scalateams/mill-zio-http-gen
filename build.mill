@@ -1,4 +1,4 @@
-//| mill-version: 1.1.7-native
+//| mill-version: 1.2.0-RC1-42-dc1f60-native
 //| mill-jvm-version: system
 //| mvnDeps:
 //| - com.goyeau::mill-scalafix::0.6.2
@@ -88,8 +88,8 @@ object `mill-zio-http-gen` extends BuildInfo with ScalaModule with SonatypeCentr
 
     override def forkEnv =
       Map(
-        "MILL_EXECUTABLE_PATH" -> millExecutable.assembly().path.toString,
-        "MILL_USER_TEST_REPO"  -> publishLocalTestRepo().path.toString,
+        "MILL_EXECUTABLE_PATH" -> PathRef.toAbsString(millExecutable.assembly()),
+        "MILL_USER_TEST_REPO"  -> PathRef.toAbsString(publishLocalTestRepo()),
         "MILL_PLUGIN_VERSION"  -> publishVersion(),
       )
 
