@@ -43,11 +43,11 @@ object `mill-zio-http-gen` extends BuildInfo with ScalaModule with SonatypeCentr
   )
 
   override def mvnDeps = super.mvnDeps() ++ Seq(
-    mvn"dev.zio::zio-http-gen:3.11.3".exclude(("org.scala-sbt", "compiler-interface")),
+    mvn"dev.zio::zio-http-gen:3.11.4".exclude(("org.scala-sbt", "compiler-interface")),
     mvn"dev.zio::zio-json:0.9.1",
     mvn"dev.zio::zio-json-yaml:0.9.1",
-    mvn"dev.zio::zio-schema:1.8.5",
-    mvn"dev.zio::zio-schema-json:1.8.5",
+    mvn"dev.zio::zio-schema:1.8.6",
+    mvn"dev.zio::zio-schema-json:1.8.6",
   )
 
   override def pomSettings    = PomSettings(
