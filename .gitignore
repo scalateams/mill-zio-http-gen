@@ -46,3 +46,11 @@ out
 
 # scala-cli
 .scala-build
+
+# mcp
+.mcp.json
+
+# claude
+.claude/agent-memory-local/
+.claude/settings.local.json
+CLAUDE.local.md
