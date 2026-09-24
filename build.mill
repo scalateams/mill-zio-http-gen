@@ -82,7 +82,7 @@ object `mill-zio-http-gen` extends BuildInfo with ScalaModule with SonatypeCentr
       "-Werror",
       "-Wunused:all",
     )
-  override def scalaVersion  = "3.7.4"
+  override def scalaVersion  = "3.9.0"
 
   object test extends ScalaTests with TestModule.ScalaTest {
 
