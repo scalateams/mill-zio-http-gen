@@ -38,7 +38,7 @@ jobs:
           java-version: 17
           distribution: temurin
       - name: Restore Coursier cache
-        uses: coursier/cache-action@v8.1.1
+        uses: coursier/cache-action@v8.2.0
       - name: Run checks
         run: ./mill __.checkStyle + __.test + __.publishLocal
       - name: Publish artifacts
