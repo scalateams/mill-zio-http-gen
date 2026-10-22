@@ -23,7 +23,7 @@ jobs:
           java-version: 17
           distribution: temurin
       - name: Run Scala Steward
-        uses: scala-steward-org/scala-steward-action@v2.96.0
+        uses: scala-steward-org/scala-steward-action@v2.97.0
         with:
           branches: main
           repo-config: .scala-steward.conf
