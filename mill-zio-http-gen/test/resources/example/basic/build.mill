@@ -10,8 +10,8 @@ import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
 
 object `package` extends ScalaModule with ZioHttpGenModule {
 
-  def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.11.6")
-  def scalaVersion = "3.3.8"
+  def mvnDeps      = super.mvnDeps() ++ Seq(mvn"dev.zio::zio-http:3.12.0")
+  def scalaVersion = "3.9.0"
 
   object openapi extends OpenAPIModule {
 
