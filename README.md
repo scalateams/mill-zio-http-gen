@@ -33,7 +33,7 @@ Compiling compiler interface...
 done compiling
 ```
 
-> **NOTE**: Requires Mill 1.3 or later. For earlier Mill 1.x versions, use `0.1.7` or older.
+> **NOTE**: Requires Mill 1.3 or later. For earlier Mill 1.x versions, use `0.1.8` or older.
 
 ### Overriding default configuration
 
