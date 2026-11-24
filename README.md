@@ -4,12 +4,14 @@
 
 A [zio-http-gen](https://github.com/zio/zio-http) plugin for Mill build tool.
 
+> **NOTE**: Requires Mill 1.3 or later. For earlier Mill 1.x versions, use `0.1.7` or older.
+
 ## Usage
 
 *build.mill*:
 ```scala
 //| mvnDeps:
-//| - org.scalateams::mill-zio-http-gen::0.1.7
+//| - org.scalateams::mill-zio-http-gen::0.2.0
 import mill.scalalib.*
 import org.scalateams.mill.zio.http.gen.ZioHttpGenModule
 
